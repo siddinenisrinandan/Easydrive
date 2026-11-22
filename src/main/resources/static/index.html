@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DriveEase - Car & Bike Rentals</title>
+  <meta name="description" content="Rent self-drive cars and bikes with insurance, live GPS tracking and 24x7 support.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="badge" style="background:rgba(245,158,11,.18);color:#fcd34d">⚡ Instant booking · Zero paperwork · 24x7 support</span>
+      <h1 class="mt">Your journey,<br><em>your wheels.</em></h1>
+      <p class="lead">Self-drive cars, chauffeur rides and bikes across Hyderabad & Andhra Pradesh. Transparent pricing with insurance,
+        live GPS tracking for your family, and an AI assistant that plans the trip with you.</p>
+      <div class="row mt2">
+        <a href="/vehicles.html?type=CAR" class="btn accent">Browse cars</a>
+        <a href="/vehicles.html?type=BIKE" class="btn light">Browse bikes</a>
+        <button class="btn light" onclick="DE.openChat()">🤖 Ask AI</button>
+      </div>
+      <div class="hero-stats">
+        <div><b>20+</b><span>Cars & bikes</span></div>
+        <div><b>12</b><span>Pickup hubs</span></div>
+        <div><b>4.8★</b><span>Average rating</span></div>
+        <div><b>24x7</b><span>SOS & roadside</span></div>
+      </div>
+    </div>
+    <div class="hero-art" id="hero-art"></div>
+  </div>
+</section>
+
+<div class="container">
+  <form class="card search-box" id="search-form">
+    <div>
+      <div class="row between" style="margin-bottom:6px">
+        <label style="margin:0">Pickup location</label>
+        <div class="type-switch" id="type-switch">
+          <button type="button" data-type="CAR" class="active">🚗 Car</button>
+          <button type="button" data-type="BIKE">🏍 Bike</button>
+        </div>
+      </div>
+      <select id="s-location"></select>
+    </div>
+    <div><label>Pickup date & time</label><input type="datetime-local" id="s-start" required></div>
+    <div><label>Return date & time</label><input type="datetime-local" id="s-end" required></div>
+    <div><label>Seats</label>
+      <select id="s-seats"><option value="">Any</option><option>2</option><option>4</option><option>5</option><option>7</option></select>
+    </div>
+    <button class="btn" type="submit" style="height:46px">Search 🔍</button>
+  </form>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><h2>Popular cars</h2><p>From city hatchbacks to 7-seater SUVs and luxury sedans.</p></div>
+    <div class="vehicle-grid" id="featured-cars"><div class="spinner"></div></div>
+    <div class="center mt2"><a class="btn ghost" href="/vehicles.html?type=CAR">View all cars →</a></div>
+  </div>
+</section>
+
+<section class="section" style="background:#fff">
+  <div class="container">
+    <div class="section-title"><h2>Bikes & scooters</h2><p>Beat the traffic. Weekend rides, daily commutes and adventure tours.</p></div>
+    <div class="vehicle-grid" id="featured-bikes"><div class="spinner"></div></div>
+    <div class="center mt2"><a class="btn ghost" href="/vehicles.html?type=BIKE">View all bikes →</a></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><h2>Why DriveEase?</h2><p>Everything you need for a safe, transparent rental - in one place.</p></div>
+    <div class="features">
+      <div class="card feature"><div class="icon">💰</div><h3>Transparent pricing</h3><p>Live price breakdown with insurance, GST, deposit and km limit before you pay. No hidden charges.</p></div>
+      <div class="card feature"><div class="icon">🛡️</div><h3>Insurance on every trip</h3><p>Choose Basic, Standard or Premium Zero-Dep protection. Premium halves your deposit.</p></div>
+      <div class="card feature"><div class="icon">📍</div><h3>Live GPS tracking</h3><p>Real-time location, speed, ETA and over-speed alerts. Share a live link with your family.</p></div>
+      <div class="card feature"><div class="icon">🚨</div><h3>SOS & roadside help</h3><p>One-tap SOS, accident, medical and breakdown alerts with your live location to our 24x7 team.</p></div>
+      <div class="card feature"><div class="icon">💳</div><h3>Pay your way</h3><p>UPI, cards, net banking, wallets or pay at pickup. Save cards securely as tokens.</p></div>
+      <div class="card feature"><div class="icon">🧑‍✈️</div><h3>Verified drivers</h3><p>Add a professional driver to any car. Name, rating and phone shared before the trip.</p></div>
+      <div class="card feature"><div class="icon">🔐</div><h3>OTP-secured pickup</h3><p>A trip OTP verifies the right person picks up the right vehicle. No impersonation.</p></div>
+      <div class="card feature"><div class="icon">🤖</div><h3>AI trip assistant</h3><p>Ask in English or Telugu - get vehicle suggestions, price quotes and policy answers instantly.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:#fff">
+  <div class="container">
+    <div class="section-title"><h2>How it works</h2><p>Book in under 2 minutes.</p></div>
+    <div class="steps">
+      <div class="card step"><h3>Choose</h3><p>Pick a car or bike, dates and pickup hub. Ask the AI if unsure.</p></div>
+      <div class="card step"><h3>Protect</h3><p>Select an insurance plan, driver and add-ons. Apply a coupon.</p></div>
+      <div class="card step"><h3>Verify</h3><p>Enter licence and emergency contact once - saved for next time.</p></div>
+      <div class="card step"><h3>Pay</h3><p>Pay securely by UPI, card, net banking, wallet or at pickup.</p></div>
+      <div class="card step"><h3>Drive</h3><p>Show the OTP at pickup, drive, and track your trip live.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><h2>Insurance plans</h2><p>Drive worry-free. Every plan includes third-party cover.</p></div>
+    <div class="grid-3" id="plans"></div>
+  </div>
+</section>
+
+<section class="section" style="background:#fff">
+  <div class="container">
+    <div class="section-title"><h2>Offers for you</h2><p>Apply these coupon codes at checkout.</p></div>
+    <div class="vehicle-grid" id="offers"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title"><h2>Loved by travellers</h2></div>
+    <div class="grid-3">
+      <div class="card"><div class="stars">★★★★★</div><p>"Took the Thar to Araku valley. Spotless vehicle, and my parents could track us live the whole way!"</p><b>Arjun R.</b> <span class="muted small">Vijayawada</span></div>
+      <div class="card"><div class="stars">★★★★★</div><p>"Booked an Innova with driver for Tirupati. Driver details came instantly, super safe and punctual."</p><b>Lakshmi P.</b> <span class="muted small">Hyderabad</span></div>
+      <div class="card"><div class="stars">★★★★☆</div><p>"The AI assistant suggested the Ather for my office commute - zero fuel cost and the EV25 coupon saved more."</p><b>Priya S.</b> <span class="muted small">Gachibowli</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>

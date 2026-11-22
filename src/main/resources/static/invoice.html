@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Invoice - DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+<div class="container">
+  <div class="row between no-print mt"><a href="/dashboard.html">← My bookings</a><button class="btn" onclick="window.print()">🖨 Print / Save PDF</button></div>
+  <div class="card invoice" id="invoice"><div class="spinner"></div></div>
+</div>
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+  DE.renderLayout("");
+  (async () => {
+    if (!DE.requireLogin()) return;
+    const el = document.getElementById("invoice");
+    try {
+      const { booking: b, payments } = await DE.api.get("/api/bookings/" + DE.qs("ref"));
+      const c = b.customer, v = b.vehicle;
+      const rows = [
+        ["Rental charge (" + b.totalHours + " hrs, " + b.billableDays + " day(s))", b.baseAmount],
+        ["Weekend demand surcharge", b.weekendSurcharge],
+        ["Long rental discount", -b.longRentalDiscount],
+        ["Insurance - " + DE.pretty(b.insurancePlan), b.insuranceAmount],
+        ["Professional driver", b.driverAmount],
+        ["Add-ons" + (b.addons ? " (" + b.addons + ")" : ""), b.addonsAmount],
+        ["One-way drop fee", b.oneWayFee],
+        ["Coupon " + (b.couponCode || ""), -b.couponDiscount],
+        ["GST @ 18%", b.taxAmount],
+      ].filter((r) => r[1]);
+      const extras = [["Extra km charges (" + Math.max(0, b.distanceKm - b.kmLimit).toFixed(1) + " km)", b.extraKmCharge], ["Late return fee", b.lateFee]].filter((r) => r[1]);
+      el.innerHTML = `
+        <div class="invoice-head">
+          <div><div class="brand" style="color:var(--text)"><span class="logo">🚗</span><span>Drive<b>Ease</b></span></div>
+            <div class="small muted mt">DriveEase Rentals Pvt. Ltd. (demo)<br>Hitech City, Hyderabad 500081<br>GSTIN: 36AAAAA0000A1Z5 (sample)</div></div>
+          <div style="text-align:right"><h2 style="margin:0">TAX INVOICE</h2>
+            <div class="small">Invoice #INV-${DE.esc(b.bookingRef)}<br>Date: ${DE.fmtDate(b.createdAt)}<br>${DE.statusBadge(b.status)} ${DE.statusBadge(b.paymentStatus)}</div></div>
+        </div>
+        <div class="grid-2">
+          <div><span class="muted small">BILLED TO</span><br><b>${DE.esc(c.fullName)}</b><br>${DE.esc(c.email)}<br>${DE.esc(c.phone || "")}<br>${DE.esc(c.address || "")}<br>Licence: ${DE.esc(c.licenseNumber || "-")}</div>
+          <div><span class="muted small">VEHICLE & TRIP</span><br><b>${DE.esc(v.name)}</b> · ${DE.esc(v.registrationNumber || "")}<br>
+            ${DE.esc(b.pickupLocation)} → ${DE.esc(b.dropLocation)}<br>${DE.fmtDate(b.startTime)} → ${DE.fmtDate(b.endTime)}
+            ${b.driver ? `<br>Driver: ${DE.esc(b.driver.name)} (${DE.esc(b.driver.phone)})` : ""}</div>
+        </div>
+        <table class="breakdown mt2">
+          ${rows.map((r) => `<tr class="${r[1] < 0 ? "neg" : ""}"><td>${DE.esc(r[0])}</td><td>${DE.money2(r[1])}</td></tr>`).join("")}
+          <tr><td><b>Booking total</b></td><td><b>${DE.money2(b.totalAmount)}</b></td></tr>
+          ${extras.map((r) => `<tr><td>${DE.esc(r[0])}</td><td>${DE.money2(r[1])}</td></tr>`).join("")}
+          ${b.refundAmount ? `<tr class="neg"><td>Refund on cancellation</td><td>${DE.money2(-b.refundAmount)}</td></tr>` : ""}
+        </table>
+        <div class="total-row"><span>Final amount</span><b>${DE.money2(b.status === "CANCELLED" ? b.finalAmount : b.finalAmount || b.totalAmount)}</b></div>
+        <p class="small muted">Refundable security deposit: ${DE.money(b.depositAmount)} · Free km: ${b.kmLimit} · Distance driven: ${b.distanceKm.toFixed(1)} km</p>
+        <h3 class="mt2">Payments</h3>
+        <div class="table-wrap"><table class="data">
+          <tr><th>Date</th><th>Type</th><th>Method</th><th>Details</th><th>Transaction</th><th>Status</th><th>Amount</th></tr>
+          ${payments.length ? payments.map((p) => `<tr><td>${DE.fmtDate(p.createdAt)}</td><td>${DE.esc(p.kind)}</td><td>${DE.pretty(p.method)}</td>
+            <td>${DE.esc(p.maskedDetails || p.gatewayMessage || "")}</td><td class="small">${DE.esc(p.transactionId || "")}</td><td>${DE.statusBadge(p.status)}</td>
+            <td><b>${p.kind === "REFUND" ? "−" : ""}${DE.money2(p.amount)}</b></td></tr>`).join("") : `<tr><td colspan="7" class="muted">No payments yet</td></tr>`}
+        </table></div>
+        <p class="small muted mt2">This is a computer-generated invoice for a demo project. Thank you for riding with DriveEase!</p>`;
+    } catch (e) {
+      el.innerHTML = `<div class="notice err">${DE.esc(e.message)}</div>`;
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Trip Tracking - DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container section" style="padding-top:24px">
+  <div class="row between mb">
+    <div>
+      <h1 style="font-size:1.6rem;margin:0" id="t-title">Live trip</h1>
+      <div class="muted" id="t-sub">Loading…</div>
+    </div>
+    <div class="row no-print" id="t-actions"></div>
+  </div>
+  <div class="track-layout">
+    <div>
+      <div id="map"></div>
+      <div class="row mt small muted">
+        <label class="check" style="font-weight:500"><input type="checkbox" id="follow" checked> Follow vehicle</label>
+        <span>🟢 Pickup · 🏁 Drop · dashed = planned route · solid = route driven</span>
+      </div>
+    </div>
+    <aside id="panel"><div class="card"><div class="spinner"></div></div></aside>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/track.js"></script>
+</body>
+</html>

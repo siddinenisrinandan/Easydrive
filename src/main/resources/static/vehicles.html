@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fleet - DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container section" style="padding-top:30px">
+  <div class="row between mb">
+    <div>
+      <h1 id="page-title" style="font-size:1.8rem;margin:0">Our fleet</h1>
+      <p class="muted" id="result-count" style="margin:4px 0 0">Loading…</p>
+    </div>
+    <div class="row">
+      <input id="f-q" placeholder="Search Creta, sunroof, EV…" style="width:240px">
+      <select id="f-sort" style="width:auto">
+        <option value="popular">Most popular</option>
+        <option value="priceAsc">Price: low to high</option>
+        <option value="priceDesc">Price: high to low</option>
+        <option value="rating">Top rated</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layout-sidebar">
+    <aside class="card filters">
+      <h4>Vehicle type</h4>
+      <div class="chip-group" id="f-type">
+        <button class="chip" data-v="">All</button><button class="chip" data-v="CAR">🚗 Cars</button><button class="chip" data-v="BIKE">🏍 Bikes</button>
+      </div>
+      <h4>Category</h4>
+      <div class="chip-group" id="f-category"></div>
+      <h4>Fuel</h4>
+      <div class="chip-group" id="f-fuel">
+        <button class="chip" data-v="">Any</button><button class="chip" data-v="Petrol">Petrol</button><button class="chip" data-v="Diesel">Diesel</button><button class="chip" data-v="Electric">⚡ Electric</button>
+      </div>
+      <h4>Transmission</h4>
+      <div class="chip-group" id="f-trans">
+        <button class="chip" data-v="">Any</button><button class="chip" data-v="Manual">Manual</button><button class="chip" data-v="Automatic">Automatic</button>
+      </div>
+      <h4>Minimum seats</h4>
+      <select id="f-seats" class="mb"><option value="">Any</option><option>2</option><option>4</option><option>5</option><option>7</option></select>
+      <h4>Max price / day: <span id="price-label"></span></h4>
+      <input type="range" id="f-price" min="300" max="10000" step="100" value="10000">
+      <h4 class="mt">Check availability</h4>
+      <div class="field"><label class="small">Pickup</label><input type="datetime-local" id="f-start"></div>
+      <div class="field"><label class="small">Return</label><input type="datetime-local" id="f-end"></div>
+      <button class="btn ghost block sm" id="f-reset">Reset filters</button>
+    </aside>
+
+    <main>
+      <div id="avail-note" class="notice mb hidden"></div>
+      <div class="vehicle-grid" id="grid"><div class="spinner"></div></div>
+    </main>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script src="/js/vehicles.js"></script>
+</body>
+</html>

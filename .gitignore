@@ -1,0 +1,10 @@
+target/
+.mvn/maven/
+data/
+*.log
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/

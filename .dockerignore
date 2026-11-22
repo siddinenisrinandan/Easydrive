@@ -1,0 +1,6 @@
+target/
+data/
+.mvn/maven/
+.idea/
+*.iml
+.git/

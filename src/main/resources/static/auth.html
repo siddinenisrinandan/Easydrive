@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - DriveEase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header id="site-header"></header>
+
+<div class="container section">
+  <div class="card" style="max-width:460px;margin:0 auto">
+    <div class="tabs" id="auth-tabs">
+      <button class="active" data-tab="login">Login</button>
+      <button data-tab="register">Create account</button>
+    </div>
+
+    <form id="login-form">
+      <h2>Welcome back 👋</h2>
+      <div class="field"><label>Email</label><input type="email" id="l-email" required autocomplete="email"></div>
+      <div class="field"><label>Password</label><input type="password" id="l-pass" required autocomplete="current-password"></div>
+      <button class="btn block" type="submit">Login</button>
+      <div class="notice mt small">Demo account: <b>demo@driveease.in</b> / <b>demo123</b>
+        <button type="button" class="btn ghost sm" id="fill-demo" style="margin-left:6px">Use demo</button></div>
+    </form>
+
+    <form id="register-form" class="hidden">
+      <h2>Join DriveEase 🚗</h2>
+      <p class="muted small">Get 100 welcome loyalty points. Use code <b>FIRST20</b> on your first trip.</p>
+      <div class="field"><label>Full name</label><input id="r-name" required autocomplete="name"></div>
+      <div class="field"><label>Email</label><input type="email" id="r-email" required autocomplete="email"></div>
+      <div class="field"><label>Mobile number</label><input id="r-phone" required placeholder="98765 43210" autocomplete="tel"></div>
+      <div class="field"><label>Password</label><input type="password" id="r-pass" required minlength="6" autocomplete="new-password">
+        <div class="hint">At least 6 characters. Stored as a salted PBKDF2 hash.</div></div>
+      <button class="btn block" type="submit">Create account</button>
+    </form>
+  </div>
+</div>
+
+<footer id="site-footer"></footer>
+<script src="/js/common.js"></script>
+<script>
+  DE.renderLayout("");
+  const next = DE.qs("next") || "/dashboard.html";
+  const show = (tab) => {
+    document.querySelectorAll("#auth-tabs button").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+    document.getElementById("login-form").classList.toggle("hidden", tab !== "login");
+    document.getElementById("register-form").classList.toggle("hidden", tab !== "register");
+  };
+  document.querySelectorAll("#auth-tabs button").forEach((b) => b.addEventListener("click", () => show(b.dataset.tab)));
+  if (DE.qs("tab") === "register") show("register");
+
+  document.getElementById("fill-demo").onclick = () => {
+    document.getElementById("l-email").value = "demo@driveease.in";
+    document.getElementById("l-pass").value = "demo123";
+  };
+
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("button[type=submit]");
+    await DE.withBusy(btn, async () => {
+      try {
+        const r = await DE.api.post("/api/auth/login", {
+          email: document.getElementById("l-email").value, password: document.getElementById("l-pass").value });
+        DE.setSession(r.token, r.customer);
+        location.href = next;
+      } catch (err) { DE.toast(err.message, "error"); }
+    });
+  });
+
+  document.getElementById("register-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector("button[type=submit]");
+    await DE.withBusy(btn, async () => {
+      try {
+        const r = await DE.api.post("/api/auth/register", {
+          fullName: document.getElementById("r-name").value, email: document.getElementById("r-email").value,
+          phone: document.getElementById("r-phone").value, password: document.getElementById("r-pass").value });
+        DE.setSession(r.token, r.customer);
+        DE.toast("Welcome to DriveEase!", "success");
+        location.href = next;
+      } catch (err) { DE.toast(err.message, "error"); }
+    });
+  });
+</script>
+</body>
+</html>
